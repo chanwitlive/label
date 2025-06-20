@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>สร้างใบปะหน้า v4 (ชิดบน)</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        /* --- ส่วนที่ 1: สไตล์สำหรับหน้าจอปกติ --- */
+        html, body {
+            height: 100%;
+        }
+
+        body {
+            font-family: 'Sarabun', sans-serif;
+            margin: 0;
+            padding: 0; 
+            background-color: #f0f2f5;
+            display: flex;
+            justify-content: center;
+            /* *** แก้จาก center เป็น flex-start เพื่อให้ชิดบน *** */
+            align-items: flex-start; 
+        }
+        
+        .container {
+            width: 100%;
+            /* เอา height 100% ออกเพื่อให้เนื้อหาเป็นตัวกำหนดความสูง */
+            display: flex; 
+            flex-direction: column;
+            justify-content: flex-start; /* จัดเนื้อหาใน container ให้ชิดบน */
+            background: white;
+            padding: 25px;
+            box-sizing: border-box; 
+        }
+
+        /* ทำให้หน้ากรอกข้อมูลแสดงบนจอใหญ่ได้สวยงามขึ้น */
+        #input-page {
+             width: 100%;
+             min-height: 100%; /* ทำให้พื้นหลังสีขาวเต็มจอ แม้เนื้อหาน้อย */
+        }
+
+        #input-form {
+            width: 100%;
+            max-width: 500px; /* จำกัดความกว้างของฟอร์ม */
+            margin: 0 auto; /* จัดฟอร์มให้อยู่กลางแนวนอน */
+            padding-top: 2rem; /* เพิ่มระยะห่างจากขอบบนนิดหน่อย */
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 8px;
+            font-size: 1.2rem;
+            border-bottom: 2px solid #eee;
+            padding-bottom: 5px;
+        }
+
+        input[type="text"],
+        textarea {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box; 
+            font-size: 1rem;
+            font-family: 'Sarabun', sans-serif;
+        }
+
+        #recipientInfo {
+            height: 150px;
+            font-size: 1.1rem;
+            resize: vertical;
+        }
+
+        .action-button {
+            width: 100%;
+            padding: 15px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 1.2rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        .action-button:hover {
+            background-color: #0056b3;
+        }
+        
+        /* --- ส่วนที่ 2: สไตล์สำหรับหน้าใบปะหน้า --- */
+        #output-page {
+            display: none; 
+            width: 11cm; 
+            padding: 0.5cm;
+            box-sizing: border-box;
+            background: white;
+            margin-top: 2rem; /* เพิ่มระยะห่างจากขอบบนสำหรับหน้า Preview */
+        }
+        
+        #output-page .section { margin-bottom: 15px; }
+        #output-page .header {
+            font-size: 1.5rem; 
+            font-weight: bold;
+            border-bottom: 2px solid black;
+            padding-bottom: 5px;
+            margin-bottom: 10px;
+        }
+        
+        #sender-details { font-size: 1.1rem; }
+        #recipient-details {
+            font-size: 1.4rem; 
+            font-weight: bold;
+            line-height: 1.5;
+            white-space: pre-wrap; 
+        }
+
+        /* --- ส่วนที่ 3: สไตล์สำหรับการพิมพ์จริง --- */
+        @media print {
+            body > * { display: none; }
+            #output-page {
+                display: block !important;
+                margin: 0;
+                padding: 0.2cm; /* อาจจะเพิ่มขอบเล็กน้อยตอนพิมพ์จริง */
+                box-shadow: none;
+                width: 11cm;
+                -webkit-print-color-adjust: exact;
+            }
+        }
+
+    </style>
+</head>
+<body>
+
+    <div id="input-page" class="container">
+        <div id="input-form">
+            <form onsubmit="generateLabel(event)">
+                <h1>สร้างใบปะหน้า</h1>
+                <div class="form-group">
+                    <label for="senderName">ผู้ส่ง:</label>
+                    <input type="text" id="senderName" placeholder="ชื่อ-นามสกุล ผู้ส่ง" value="นันท์กานต์ คำโต" required>
+                    <input type="text" id="senderPhone" placeholder="เบอร์โทรผู้ส่ง" value="0892101682" style="margin-top: 10px;" required>
+                </div>
+                <div class="form-group">
+                    <label for="recipientInfo">ผู้รับ:</label>
+                    <textarea id="recipientInfo" placeholder="วางข้อมูลผู้รับทั้งหมดที่นี่ได้เลย&#10;เช่น&#10;XXXXX&#10;06555677557&#10;109 หมู่ 15 พรานใต้ตะวันตก ต.พราน อ.ขุนหาญ, ศรีสะเกษ 33150" required></textarea>
+                </div>
+                <button type="submit" class="action-button">รับใบปะหน้า</button>
+            </form>
+        </div>
+    </div>
+
+    <div id="output-page">
+        <div class="section">
+            <div class="header">ผู้ส่ง:</div>
+            <div id="sender-details"></div>
+        </div>
+        <div class="section">
+            <div class="header">ผู้รับ:</div>
+            <div id="recipient-details"></div>
+        </div>
+    </div>
+
+    <script>
+        function generateLabel(event) {
+            event.preventDefault(); 
+
+            const senderName = document.getElementById('senderName').value;
+            const senderPhone = document.getElementById('senderPhone').value;
+            const recipientInfo = document.getElementById('recipientInfo').value;
+
+            document.getElementById('sender-details').innerText = `${senderName}\n${senderPhone}`;
+            document.getElementById('recipient-details').innerText = recipientInfo;
+            
+            document.getElementById('input-page').style.display = 'none';
+            document.getElementById('output-page').style.display = 'block';
+        }
+        
+        window.onafterprint = function() {
+           document.getElementById('output-page').style.display = 'none';
+           document.getElementById('input-page').style.display = 'flex';
+        };
+    </script>
+
+</body>
+</html>
+
