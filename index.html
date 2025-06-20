@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>สร้างใบปะหน้าส่งพัสดุ</title>
+    <title>สร้างใบปะหน้า v5 (ไร้ขอบ)</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@400;700&display=swap" rel="stylesheet">
@@ -20,97 +20,63 @@
             background-color: #f0f2f5;
             display: flex;
             justify-content: center;
-            /* *** แก้จาก center เป็น flex-start เพื่อให้ชิดบน *** */
             align-items: flex-start; 
         }
         
         .container {
             width: 100%;
-            /* เอา height 100% ออกเพื่อให้เนื้อหาเป็นตัวกำหนดความสูง */
             display: flex; 
             flex-direction: column;
-            justify-content: flex-start; /* จัดเนื้อหาใน container ให้ชิดบน */
+            justify-content: flex-start;
             background: white;
             padding: 25px;
             box-sizing: border-box; 
         }
-
-        /* ทำให้หน้ากรอกข้อมูลแสดงบนจอใหญ่ได้สวยงามขึ้น */
+        
         #input-page {
              width: 100%;
-             min-height: 100%; /* ทำให้พื้นหลังสีขาวเต็มจอ แม้เนื้อหาน้อย */
+             min-height: 100%;
         }
 
         #input-form {
             width: 100%;
-            max-width: 500px; /* จำกัดความกว้างของฟอร์ม */
-            margin: 0 auto; /* จัดฟอร์มให้อยู่กลางแนวนอน */
-            padding-top: 2rem; /* เพิ่มระยะห่างจากขอบบนนิดหน่อย */
+            max-width: 500px;
+            margin: 0 auto;
+            padding-top: 2rem;
         }
 
-        h1 {
-            text-align: center;
-            color: #333;
-            margin-bottom: 20px;
+        h1, .form-group, label, input, textarea, .action-button {
+            /* Styles for form elements remain the same */
+            /* ... (omitted for brevity, but they are in the full code) ... */
         }
-
-        .form-group {
-            margin-bottom: 20px;
-        }
-
-        label {
-            display: block;
-            font-weight: bold;
-            margin-bottom: 8px;
-            font-size: 1.2rem;
-            border-bottom: 2px solid #eee;
-            padding-bottom: 5px;
-        }
-
-        input[type="text"],
-        textarea {
-            width: 100%;
-            padding: 12px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-            box-sizing: border-box; 
-            font-size: 1rem;
-            font-family: 'Sarabun', sans-serif;
-        }
-
-        #recipientInfo {
-            height: 150px;
-            font-size: 1.1rem;
-            resize: vertical;
-        }
-
-        .action-button {
-            width: 100%;
-            padding: 15px;
-            background-color: #007bff;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            font-size: 1.2rem;
-            font-weight: bold;
-            cursor: pointer;
-            transition: background-color 0.3s;
-        }
-        .action-button:hover {
-            background-color: #0056b3;
-        }
+        h1{text-align:center;color:#333;margin-bottom:20px}
+        .form-group{margin-bottom:20px}
+        label{display:block;font-weight:700;margin-bottom:8px;font-size:1.2rem;border-bottom:2px solid #eee;padding-bottom:5px}
+        input[type=text],textarea{width:100%;padding:12px;border:1px solid #ccc;border-radius:4px;box-sizing:border-box;font-size:1rem;font-family:'Sarabun',sans-serif}
+        #recipientInfo{height:150px;font-size:1.1rem;resize:vertical}
+        .action-button{width:100%;padding:15px;background-color:#007bff;color:#fff;border:none;border-radius:5px;font-size:1.2rem;font-weight:700;cursor:pointer;transition:background-color .3s}
+        .action-button:hover{background-color:#0056b3}
         
         /* --- ส่วนที่ 2: สไตล์สำหรับหน้าใบปะหน้า --- */
         #output-page {
             display: none; 
             width: 11cm; 
-            padding: 0.5cm;
+            /* *** เอา Padding บน-ล่าง ออก, เหลือไว้แค่ซ้าย-ขวาเล็กน้อย *** */
+            padding: 0 0.2cm;
             box-sizing: border-box;
             background: white;
-            margin-top: 2rem; /* เพิ่มระยะห่างจากขอบบนสำหรับหน้า Preview */
+            margin-top: 1rem; /* ลดระยะห่างจากขอบบนในหน้า Preview */
         }
         
-        #output-page .section { margin-bottom: 15px; }
+        #output-page .section { 
+            margin-bottom: 15px; /* ระยะห่าง *ระหว่าง* ผู้ส่งกับผู้รับ */
+        }
+
+        /* *** คำสั่งใหม่: เอาช่องว่างท้ายสุดออก *** */
+        #output-page .section:last-child {
+            margin-bottom: 0;
+        }
+        
         #output-page .header {
             font-size: 1.5rem; 
             font-weight: bold;
@@ -133,7 +99,8 @@
             #output-page {
                 display: block !important;
                 margin: 0;
-                padding: 0.2cm; /* อาจจะเพิ่มขอบเล็กน้อยตอนพิมพ์จริง */
+                /* *** พิมพ์จริง: ไม่มี Padding บน-ล่าง, มีซ้าย-ขวาเล็กน้อยกันตัวอักษรตกขอบ *** */
+                padding: 0 0.1cm; 
                 box-shadow: none;
                 width: 11cm;
                 -webkit-print-color-adjust: exact;
@@ -150,12 +117,12 @@
                 <h1>สร้างใบปะหน้า</h1>
                 <div class="form-group">
                     <label for="senderName">ผู้ส่ง:</label>
-                    <input type="text" id="senderName" placeholder="ชื่อ-นามสกุล ผู้ส่ง" value="ชื่อผู้ส่ง" required>
-                    <input type="text" id="senderPhone" placeholder="เบอร์โทรผู้ส่ง" value="โทร" style="margin-top: 10px;" required>
+                    <input type="text" id="senderName" placeholder="ชื่อ-นามสกุล ผู้ส่ง" value="=ใส่ชื่อคนส่ง" required>
+                    <input type="text" id="senderPhone" placeholder="เบอร์โทรผู้ส่ง" value="08" style="margin-top: 10px;" required>
                 </div>
                 <div class="form-group">
                     <label for="recipientInfo">ผู้รับ:</label>
-                    <textarea id="recipientInfo" placeholder="วางข้อมูลผู้รับทั้งหมดที่นี่" required></textarea>
+                    <textarea id="recipientInfo" placeholder="วางข้อมูลผู้รับ" required></textarea>
                 </div>
                 <button type="submit" class="action-button">รับใบปะหน้า</button>
             </form>
@@ -196,4 +163,3 @@
 
 </body>
 </html>
-
