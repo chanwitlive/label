@@ -70,13 +70,23 @@
             margin-bottom: 0;
         }
         
-        /* *** จุดที่แก้ไขอยู่ตรงนี้ *** */
+        /* *** จุดที่แก้ไข *** */
+        /* สไตล์ที่ใช้ร่วมกันทั้งสองหัวข้อ */
         #output-page .header {
-            font-size: 17px; /* ปรับขนาดตัวอักษรเป็น 17px */
-            font-weight: bold; /* เป็นตัวหนาอยู่แล้ว */
+            font-weight: bold;
             border-bottom: 2px solid black;
             padding-bottom: 5px;
             margin-bottom: 10px;
+        }
+
+        /* ขนาดตัวอักษรหัวข้อ "ผู้ส่ง" (ปรับได้ที่นี่) */
+        #output-page .sender-header {
+            font-size: 17px;
+        }
+
+        /* ขนาดตัวอักษรหัวข้อ "ผู้รับ" (ปรับได้ที่นี่) */
+        #output-page .recipient-header {
+            font-size: 20px; /* ทำให้ใหญ่กว่านิดหน่อยเป็นค่าเริ่มต้น */
         }
         
         #sender-details { 
@@ -133,11 +143,11 @@
 
     <div id="output-page">
         <div class="section">
-            <div class="header">ผู้ส่ง:</div>
+             <div class="header sender-header">ผู้ส่ง:</div>
             <div id="sender-details"></div>
         </div>
         <div class="section">
-            <div class="header">ผู้รับ:</div>
+             <div class="header recipient-header">ผู้รับ:</div>
             <div id="recipient-details"></div>
         </div>
         <div class="cutoff-line"></div>
