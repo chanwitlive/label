@@ -19,7 +19,6 @@
             padding: 0; 
             display: flex;
             justify-content: center;
-            /* *** เพิ่มบรรทัดนี้เพื่อไม่ให้เนื้อหายืดเต็มจอ *** */
             align-items: flex-start;
         }
         
@@ -71,16 +70,17 @@
             margin-bottom: 0;
         }
         
+        /* *** จุดที่แก้ไขอยู่ตรงนี้ *** */
         #output-page .header {
-            font-size: 1.5rem; 
-            font-weight: bold;
+            font-size: 17px; /* ปรับขนาดตัวอักษรเป็น 17px */
+            font-weight: bold; /* เป็นตัวหนาอยู่แล้ว */
             border-bottom: 2px solid black;
             padding-bottom: 5px;
             margin-bottom: 10px;
         }
         
         #sender-details { 
-            font-size: 16px; 
+            font-size: 14px; 
         }
 
         #recipient-details {
@@ -124,7 +124,7 @@
                 </div>
                 <div class="form-group">
                     <label for="recipientInfo">ผู้รับ:</label>
-                    <textarea id="recipientInfo" placeholder="วางข้อมูลผู้รับทั้งหมดที่นี่ได้" required></textarea>
+                    <textarea id="recipientInfo" placeholder="วางข้อมูลผู้รับทั้งหมดที่นี่ได้เล" required></textarea>
                 </div>
                 <button type="submit" class="action-button">รับใบปะหน้า</button>
             </form>
