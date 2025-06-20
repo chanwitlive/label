@@ -8,7 +8,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@400;700&display=swap" rel="stylesheet">
     <style>
-        /* CSS ทั้งหมดเหมือนเดิม */
+        /* CSS ทั้งหมดเหมือนเดิม เพิ่มเติมคือสไตล์ของปุ่มล้าง */
         html, body { height: 100%; }
         body { font-family: 'Sarabun', sans-serif; margin: 0; padding: 0;  display: flex; justify-content: center; align-items: flex-start; }
         .container { width: 100%; display: flex;  flex-direction: column; justify-content: flex-start; background: white; padding: 25px; box-sizing: border-box; }
@@ -16,7 +16,34 @@
         #input-form { width: 100%; max-width: 500px; margin: 0 auto; padding-top: 2rem; }
         h1{text-align:center;color:#333;margin-bottom:20px}
         .form-group{margin-bottom:20px}
-        label{display:block;font-weight:700;margin-bottom:8px;font-size:1.2rem;border-bottom:2px solid #eee;padding-bottom:5px}
+        
+        /* สไตล์สำหรับปุ่มล้างข้อมูล */
+        .label-with-button {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 2px solid #eee;
+            margin-bottom: 8px;
+            padding-bottom: 5px;
+        }
+        .label-with-button label {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+            font-size:1.2rem;
+            font-weight:700;
+        }
+        .clear-button {
+            background-color: #dc3545;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            padding: 4px 8px;
+            font-size: 12px;
+            cursor: pointer;
+        }
+        .clear-button:hover { background-color: #c82333; }
+
         input[type=text], input[type=tel], textarea{width:100%;padding:12px;border:1px solid #ccc;border-radius:4px;box-sizing:border-box;font-size:1rem;font-family:'Sarabun',sans-serif}
         #recipientAddress{height:120px;resize:vertical}
         .action-button{width:100%;padding:15px;background-color:#007bff;color:#fff;border:none;border-radius:5px;font-size:1.2rem;font-weight:700;cursor:pointer;transition:background-color .3s}
@@ -28,7 +55,7 @@
         #output-page .sender-header { font-size: 17px; }
         #output-page .recipient-header { font-size: 20px; }
         #sender-details { font-size: 14px; }
-        #recipient-details { font-size: 16px; font-weight: bold; line-height: 1.5; white-space: pre-wrap; }
+        #recipient-details { font-size: 1.4rem; font-weight: bold; line-height: 1.5; white-space: pre-wrap; }
         .cutoff-line { border-bottom: 2px dashed #888; margin-top: 15px; }
         @media print {
             body > * { display: none; }
@@ -43,12 +70,15 @@
             <form onsubmit="generateLabel(event)">
                 <h1>สร้างใบปะหน้า</h1>
                 <div class="form-group">
-                    <label for="senderName">ผู้ส่ง:</label>
+                    <div class="label-with-button">
+                        <label for="senderName">ผู้ส่ง:</label>
+                        <button type="button" class="clear-button" onclick="clearSenderInfo()">ล้างข้อมูล</button>
+                    </div>
                     <input type="text" id="senderName" placeholder="ชื่อ-นามสกุล ผู้ส่ง" value="" required>
                     <input type="text" id="senderPhone" placeholder="เบอร์โทรผู้ส่ง" value="" style="margin-top: 10px;" required>
                 </div>
                 <div class="form-group">
-                    <label for="recipientName">ผู้รับ:</label>
+                    <label style="border-bottom: 2px solid #eee; padding-bottom: 5px; margin-bottom: 8px;">ผู้รับ:</label>
                     <input type="text" id="recipientName" placeholder="ชื่อ-นามสกุล ผู้รับ" required>
                     <input type="tel" id="recipientPhone" placeholder="เบอร์โทรผู้รับ (ไม่ต้องใส่ขีด)" maxlength="10" required style="margin-top: 10px;">
                     <textarea id="recipientAddress" placeholder="บ้านเลขที่, หมู่, ถนน, ตำบล, อำเภอ, จังหวัด, รหัสไปรษณีย์" required style="margin-top: 10px;"></textarea>
@@ -71,43 +101,55 @@
     </div>
 
     <script>
-        // ฟังก์ชันสำหรับจัดรูปแบบเบอร์โทรโดยเฉพาะ
+        // โหลดข้อมูลที่เคยบันทึกไว้
+        (function loadSavedData() {
+            const savedName = localStorage.getItem('savedSenderName');
+            const savedPhone = localStorage.getItem('savedSenderPhone');
+            if (savedName) { document.getElementById('senderName').value = savedName; }
+            if (savedPhone) { document.getElementById('senderPhone').value = savedPhone; }
+        })();
+
+        // ฟังก์ชันล้างข้อมูลผู้ส่ง
+        function clearSenderInfo() {
+            document.getElementById('senderName').value = '';
+            document.getElementById('senderPhone').value = '';
+            localStorage.removeItem('savedSenderName');
+            localStorage.removeItem('savedSenderPhone');
+            document.getElementById('senderName').focus();
+        }
+
+        // ฟังก์ชันจัดรูปแบบเบอร์โทร
         function formatPhoneNumber(phone) {
             const cleaned = ('' + phone).replace(/\D/g, ''); 
             if (cleaned.length === 10) {
                 const match = cleaned.match(/^(\d{3})(\d{3})(\d{4})$/);
-                if (match) {
-                    return `${match[1]}-${match[2]}-${match[3]}`;
-                }
+                if (match) { return `${match[1]}-${match[2]}-${match[3]}`; }
             }
             return phone;
         }
 
+        // ฟังก์ชันหลักในการสร้างใบปะหน้า
         function generateLabel(event) {
             event.preventDefault(); 
 
-            // ดึงข้อมูลผู้ส่ง
             const senderName = document.getElementById('senderName').value;
             const senderPhone = document.getElementById('senderPhone').value;
+            
+            // บันทึกข้อมูลผู้ส่ง
+            localStorage.setItem('savedSenderName', senderName);
+            localStorage.setItem('savedSenderPhone', senderPhone);
 
-            // ดึงข้อมูลผู้รับจาก 3 ช่องใหม่
             const recipientName = document.getElementById('recipientName').value;
             const recipientPhone = document.getElementById('recipientPhone').value;
             const recipientAddress = document.getElementById('recipientAddress').value;
-
-            // ใช้ฟังก์ชัน formatPhoneNumber กับเบอร์โทรของผู้รับ
             const formattedRecipientPhone = formatPhoneNumber(recipientPhone);
 
-            // นำข้อมูลมารวมกันเพื่อแสดงผล
             const senderOutput = `${senderName}\n${senderPhone}`;
-            // *** จุดที่แก้ไข ***
             const recipientOutput = `${recipientName}\n📞 ${formattedRecipientPhone}\n${recipientAddress}`;
 
-            // แสดงผลในใบปะหน้า
             document.getElementById('sender-details').innerText = senderOutput;
             document.getElementById('recipient-details').innerText = recipientOutput;
             
-            // สลับหน้าจอ
             document.getElementById('input-page').style.display = 'none';
             document.getElementById('output-page').style.display = 'block';
         }
