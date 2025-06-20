@@ -19,6 +19,8 @@
             padding: 0; 
             display: flex;
             justify-content: center;
+            /* *** เพิ่มบรรทัดนี้เพื่อไม่ให้เนื้อหายืดเต็มจอ *** */
+            align-items: flex-start;
         }
         
         .container {
@@ -65,7 +67,7 @@
             margin-bottom: 15px;
         }
 
-        #output-page .section:last-of-type { /* เปลี่ยนเป็น last-of-type เพื่อความแม่นยำ */
+        #output-page .section:last-of-type { 
             margin-bottom: 0;
         }
         
@@ -77,7 +79,10 @@
             margin-bottom: 10px;
         }
         
-        #sender-details { font-size: 1.1rem; }
+        #sender-details { 
+            font-size: 14px; 
+        }
+
         #recipient-details {
             font-size: 1.4rem; 
             font-weight: bold;
@@ -85,10 +90,9 @@
             white-space: pre-wrap; 
         }
 
-        /* *** คำสั่งใหม่: สไตล์สำหรับเส้นประท้ายใบปะหน้า *** */
         .cutoff-line {
-            border-bottom: 2px dashed #888; /* เส้นประ สีเทา ไม่เข้มเกินไป */
-            margin-top: 15px; /* เว้นระยะห่างจากบรรทัดสุดท้าย */
+            border-bottom: 2px dashed #888; 
+            margin-top: 15px;
         }
 
 
